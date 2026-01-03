@@ -1,11 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { CharacterSearch } from '@/components/CharacterSearch';
+import { RaidManager } from '@/components/RaidManager';
 ---
 
 <Layout>
-	<main class="container mx-auto py-10">
-		<h1 class="text-3xl font-bold text-center mb-10">Loa Mint - Homework Tracker</h1>
-		<CharacterSearch client:load />
+	<main class="container mx-auto py-10 space-y-10">
+		<h1 class="text-3xl font-bold text-center mb-10">민트해적단 주간 레이드 공대 관리</h1>
+		<!-- <CharacterSearch client:load /> -->
+		<RaidManager client:load />
 	</main>
 </Layout>

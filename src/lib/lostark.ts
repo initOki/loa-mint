@@ -1,29 +1,34 @@
-const BASE_URL = 'https://developer-lostark.game.onstove.com';
+import {
+  CharacterProfileSchema,
+  type CharacterProfile,
+} from "./character-schema";
 
-export interface CharacterProfile {
-  CharacterName: string;
-  ServerName: string;
-  CharacterClassName: string;
-  ItemAvgLevel: string;
-  ItemMaxLevel: string;
-  // Add other fields as needed
-}
+const BASE_URL = "https://developer-lostark.game.onstove.com";
 
-export async function getCharacterProfile(characterName: string): Promise<CharacterProfile | null> {
+export type { CharacterProfile };
+
+export async function getCharacterProfile(
+  characterName: string
+): Promise<CharacterProfile | null> {
   const token = import.meta.env.PUBLIC_LOA_API_KEY;
-  
+
   if (!token) {
-    throw new Error('Lost Ark API Key is missing');
+    throw new Error("Lost Ark API Key is missing");
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/armories/characters/${encodeURIComponent(characterName)}/profiles`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${BASE_URL}/armories/characters/${encodeURIComponent(
+        characterName
+      )}/profiles`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.status === 404) {
       return null;
@@ -34,9 +39,12 @@ export async function getCharacterProfile(characterName: string): Promise<Charac
     }
 
     const data = await response.json();
-    return data;
+
+    // Validate the response with Zod schema
+    const validatedData = CharacterProfileSchema.parse(data);
+    return validatedData;
   } catch (error) {
-    console.error('Failed to fetch character profile:', error);
+    console.error("Failed to fetch character profile:", error);
     throw error;
   }
 }
